@@ -9,13 +9,13 @@
                     "name": "Move",
                     "type": "PassThrough",
                     "id": "7ccb65b4-cde0-4333-b88c-ea433241c712",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
                 {
                     "name": "run",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "61e40ca2-81b5-4626-81dc-7c9c19005ab0",
                     "expectedControlType": "",
                     "processors": "",
@@ -23,15 +23,15 @@
                 },
                 {
                     "name": "jump",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "f830859f-a911-4553-b758-bf2b418bd9cc",
-                    "expectedControlType": "",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
                 },
                 {
                     "name": "FireDirection",
-                    "type": "PassThrough",
+                    "type": "Value",
                     "id": "5c4b32e4-79b2-4a23-94d0-4f42f059d887",
                     "expectedControlType": "",
                     "processors": "",
@@ -39,8 +39,16 @@
                 },
                 {
                     "name": "Shoot",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "423fac63-c6e0-42d7-94e1-2f7158c11e82",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "squat",
+                    "type": "Value",
+                    "id": "1bbb5bb5-e41d-423c-b447-492a58c9316b",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
@@ -121,6 +129,17 @@
                     "processors": "",
                     "groups": "KeyBoard&Mouse",
                     "action": "Shoot",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "58d96ac5-6d2e-425a-aa25-49efa58b0800",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyBoard&Mouse",
+                    "action": "squat",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

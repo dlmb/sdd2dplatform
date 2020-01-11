@@ -21,13 +21,13 @@ public class PlayerInputAction_SandBox : IInputActionCollection
                     ""name"": ""Move"",
                     ""type"": ""PassThrough"",
                     ""id"": ""7ccb65b4-cde0-4333-b88c-ea433241c712"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
                 {
                     ""name"": ""run"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Value"",
                     ""id"": ""61e40ca2-81b5-4626-81dc-7c9c19005ab0"",
                     ""expectedControlType"": """",
                     ""processors"": """",
@@ -35,15 +35,15 @@ public class PlayerInputAction_SandBox : IInputActionCollection
                 },
                 {
                     ""name"": ""jump"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""f830859f-a911-4553-b758-bf2b418bd9cc"",
-                    ""expectedControlType"": """",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
                 },
                 {
                     ""name"": ""FireDirection"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Value"",
                     ""id"": ""5c4b32e4-79b2-4a23-94d0-4f42f059d887"",
                     ""expectedControlType"": """",
                     ""processors"": """",
@@ -51,8 +51,16 @@ public class PlayerInputAction_SandBox : IInputActionCollection
                 },
                 {
                     ""name"": ""Shoot"",
-                    ""type"": ""PassThrough"",
+                    ""type"": ""Button"",
                     ""id"": ""423fac63-c6e0-42d7-94e1-2f7158c11e82"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""squat"",
+                    ""type"": ""Value"",
+                    ""id"": ""1bbb5bb5-e41d-423c-b447-492a58c9316b"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
@@ -135,6 +143,17 @@ public class PlayerInputAction_SandBox : IInputActionCollection
                     ""action"": ""Shoot"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""58d96ac5-6d2e-425a-aa25-49efa58b0800"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";KeyBoard&Mouse"",
+                    ""action"": ""squat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -166,6 +185,7 @@ public class PlayerInputAction_SandBox : IInputActionCollection
         m_Player_jump = m_Player.GetAction("jump");
         m_Player_FireDirection = m_Player.GetAction("FireDirection");
         m_Player_Shoot = m_Player.GetAction("Shoot");
+        m_Player_squat = m_Player.GetAction("squat");
     }
 
     ~PlayerInputAction_SandBox()
@@ -220,6 +240,7 @@ public class PlayerInputAction_SandBox : IInputActionCollection
     private readonly InputAction m_Player_jump;
     private readonly InputAction m_Player_FireDirection;
     private readonly InputAction m_Player_Shoot;
+    private readonly InputAction m_Player_squat;
     public struct PlayerActions
     {
         private PlayerInputAction_SandBox m_Wrapper;
@@ -229,6 +250,7 @@ public class PlayerInputAction_SandBox : IInputActionCollection
         public InputAction @jump => m_Wrapper.m_Player_jump;
         public InputAction @FireDirection => m_Wrapper.m_Player_FireDirection;
         public InputAction @Shoot => m_Wrapper.m_Player_Shoot;
+        public InputAction @squat => m_Wrapper.m_Player_squat;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -253,6 +275,9 @@ public class PlayerInputAction_SandBox : IInputActionCollection
                 Shoot.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 Shoot.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
                 Shoot.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnShoot;
+                squat.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSquat;
+                squat.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSquat;
+                squat.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnSquat;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -272,6 +297,9 @@ public class PlayerInputAction_SandBox : IInputActionCollection
                 Shoot.started += instance.OnShoot;
                 Shoot.performed += instance.OnShoot;
                 Shoot.canceled += instance.OnShoot;
+                squat.started += instance.OnSquat;
+                squat.performed += instance.OnSquat;
+                squat.canceled += instance.OnSquat;
             }
         }
     }
@@ -292,5 +320,6 @@ public class PlayerInputAction_SandBox : IInputActionCollection
         void OnJump(InputAction.CallbackContext context);
         void OnFireDirection(InputAction.CallbackContext context);
         void OnShoot(InputAction.CallbackContext context);
+        void OnSquat(InputAction.CallbackContext context);
     }
 }
