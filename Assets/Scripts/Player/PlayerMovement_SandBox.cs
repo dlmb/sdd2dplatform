@@ -10,13 +10,13 @@ using UnityEngine.InputSystem.Interactions;
 public class PlayerMovement_SandBox : MonoBehaviour
 {
     public new Rigidbody rigidbody;
+    private new CapsuleCollider capsuleCollider;
 
     [Header("Camera")]
     public Camera mainCamera;
 
     [Header("Movement")]
-    private float inputDirection;
-    private Vector3 movement;
+
     [Tooltip("玩家走路的速度")] [SerializeField] private float walkSpeed = 4.5f;
     [Tooltip("玩家跑动速度")] [SerializeField] private float runSpeed = 9f;
     [Tooltip("玩家移动时的加速度乘数，默认为1")] [SerializeField] private float moveAccMutiplier = 1f;
@@ -31,37 +31,39 @@ public class PlayerMovement_SandBox : MonoBehaviour
     public Animator playerAnimator;
     PlayerInputAction_SandBox inputAction;
 
+    private float inputDirection;
+    private Vector3 movement;
     float movementInput;
     // FireDirection
     Vector2 lookPosition;
-    //Jump State
-    enum JumpState
-    {
-        landed,//在地面/贴墙状态
-        jump1,//浮空状态，可二段跳
-        jump2//不可二段跳
-    }
-    JumpState jumpState = JumpState.landed;
+
     //movement State
     enum MovementState { 
-        walk,
-        run,
-        squat,
-        slide,
-        jump
+        idle,//空闲
+        walk,//走
+        run,//跑
+        squat,//蹲
+        slide,//*滑动
+        jump,//浮空，可2段跳
+        jump2,//跳，不可2段跳
+        landed,//落地
+        hang,//悬挂（梯子，*绳子）
+        stair//楼梯
     }
-    MovementState movementState = MovementState.walk;
+    MovementState movementState = MovementState.idle;
 
+    public CapsuleCollider CapsuleCollider { get => capsuleCollider; set => capsuleCollider = value; }
 
     void Awake()
     {
-        rigidbody = GetComponent<Rigidbody>();
         iniValue();
         iniInputAction();
     }
 
     private void iniValue()
     {
+        rigidbody = GetComponent<Rigidbody>();
+        CapsuleCollider = GetComponent<CapsuleCollider>();
         //计算跳跃速度
         jumpSpeed = Mathf.Sqrt(2 * (-Physics.gravity.y) * jumpHeight);
         jump2Speed = Mathf.Sqrt(2 * (-Physics.gravity.y) * jump2Height);
@@ -73,32 +75,40 @@ public class PlayerMovement_SandBox : MonoBehaviour
         inputAction.Player.Move.performed += ctx => movementInput = ctx.ReadValue<float>();
         inputAction.Player.FireDirection.performed += ctx => lookPosition = ctx.ReadValue<Vector2>();
         inputAction.Player.jump.performed += ctx => Jump();
-        inputAction.Player.run.performed += ctx => {
-            var button = (ButtonControl)ctx.control;
-            if (button.wasPressedThisFrame && movementState == MovementState.walk)
-            {
-                movementState = MovementState.run;
-            }
-            else if (button.wasReleasedThisFrame && movementState == MovementState.run)
-            {
-                movementState = MovementState.walk;
-            }
+        inputAction.Player.run.performed += ctx =>
+        {
+            Run(ctx);
         };
+    }
+
+    private void Run(InputAction.CallbackContext ctx)
+    {
+        var button = (ButtonControl)ctx.control;
+        if (button.wasPressedThisFrame 
+            && movementState == MovementState.walk)
+        {
+            movementState = MovementState.run;
+        }
+        else if (button.wasReleasedThisFrame 
+            && movementState == MovementState.run)
+        {
+            movementState = MovementState.walk;
+        }
     }
 
     private void Jump()
     {
-        switch (jumpState)
+        switch (movementState)
         {
-            case JumpState.landed:
+            case MovementState.landed:
                 rigidbody.velocity = new Vector3(0, jumpSpeed, 0);
-                jumpState++;
+                movementState=MovementState.jump;
                 break;
-            case JumpState.jump1:
+            case MovementState.jump:
                 rigidbody.velocity = new Vector3(0, jump2Speed, 0);
-                jumpState++;
+                movementState = MovementState.jump2;
                 break;
-            case JumpState.jump2:
+            case MovementState.jump2:
                 return;
         }
     }
@@ -120,8 +130,8 @@ public class PlayerMovement_SandBox : MonoBehaviour
 
         MoveThePlayer(desiredDirection);
         TurnThePlayer();
-        AnimateThePlayer(desiredDirection);
         PullThePlayer();
+        AnimateThePlayer(desiredDirection);
     }
 
     private void PullThePlayer()
@@ -132,7 +142,6 @@ public class PlayerMovement_SandBox : MonoBehaviour
             rigidbody.velocity += Vector3.up * Physics.gravity.y * fallMutiplier * Time.deltaTime;
         }
     }
-
     private void MoveThePlayer(Vector3 desiredDirection)
     {
         movement.Set(desiredDirection.x, 0f, 0f);
@@ -178,14 +187,14 @@ public class PlayerMovement_SandBox : MonoBehaviour
         playerAnimator.SetFloat("Blend", forw);
 
         //Freeze the animation when character is jumping.
-        if(jumpState==JumpState.jump1|| jumpState == JumpState.jump2)
+        if(movementState==MovementState.jump|| movementState == MovementState.jump2)
         {
             //todo
         }
     }
     private void OnCollisionEnter(Collision collision)
     {
-        jumpState = JumpState.landed;
+        movementState = MovementState.landed;
     }
 
     private void OnEnable()

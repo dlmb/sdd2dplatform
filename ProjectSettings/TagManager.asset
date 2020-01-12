@@ -4,8 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Enemy
-  - Environment
+  - NPC
+  - Wall
+  - Ladder
+  - Stair
   layers:
   - Default
   - TransparentFX
