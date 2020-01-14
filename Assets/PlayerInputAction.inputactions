@@ -1,5 +1,5 @@
 {
-    "name": "PlayerInputAction_SandBox",
+    "name": "PlayerInputAction",
     "maps": [
         {
             "name": "Player",
@@ -15,16 +15,24 @@
                 },
                 {
                     "name": "run",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "61e40ca2-81b5-4626-81dc-7c9c19005ab0",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
                 },
                 {
-                    "name": "jump",
-                    "type": "Button",
+                    "name": "squat",
+                    "type": "PassThrough",
                     "id": "f830859f-a911-4553-b758-bf2b418bd9cc",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "jump",
+                    "type": "PassThrough",
+                    "id": "5c4b32e4-79b2-4a23-94d0-4f42f059d887",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -32,7 +40,7 @@
                 {
                     "name": "FireDirection",
                     "type": "Value",
-                    "id": "5c4b32e4-79b2-4a23-94d0-4f42f059d887",
+                    "id": "423fac63-c6e0-42d7-94e1-2f7158c11e82",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
@@ -40,16 +48,8 @@
                 {
                     "name": "Shoot",
                     "type": "Button",
-                    "id": "423fac63-c6e0-42d7-94e1-2f7158c11e82",
+                    "id": "7657b1ed-2240-410d-aaf4-d4a7807e1e9c",
                     "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
-                    "name": "squat",
-                    "type": "Value",
-                    "id": "1bbb5bb5-e41d-423c-b447-492a58c9316b",
-                    "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
                 }
@@ -134,9 +134,9 @@
                 },
                 {
                     "name": "",
-                    "id": "58d96ac5-6d2e-425a-aa25-49efa58b0800",
+                    "id": "4d05b1bc-88dd-4ad7-8459-1e735f676dfb",
                     "path": "<Keyboard>/s",
-                    "interactions": "",
+                    "interactions": "Press,Press(behavior=1)",
                     "processors": "",
                     "groups": ";KeyBoard&Mouse",
                     "action": "squat",
